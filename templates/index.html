@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Harbor</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap"
+    />
+  </head>
+  <body>
+    <div class="container text-center my-5">
+      <div class="header my-4">
+        <img src="https://shorturl.at/KhzKl" alt="Logo" class="header" />
+        <h1 class="header">Data Harbor</h1>
+      </div>
+      <div class="search-container my-5">
+        <form action="{{ url_for('search_results') }}" method="POST">
+        <h2 class="typing-text"></h2>
+        <p class="additional-text">
+          <strong>Do you want to know public data of a company?</strong>
+        </p>
+        <p class="additional-text"><strong>Find Out Now!</strong></p>
+        <div class="container">
+          <div
+            class="row height d-flex justify-content-center align-items-center"
+          >
+            <div class="col-md-8">
+              <div class="search">
+                <i class="fa fa-search"></i>
+                <input
+                  type="text"
+                  name="domain"
+                  class="form-control"
+                  placeholder="Search Now..."
+                />
+                <button type="submit" class="btn btn-primary" >Search</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="sample-text">
+          Several popular domains, e.g., prdubanco.com.ec, nestle.com,
+          corporacionfavorita.com.
+        </p>
+      </div>
+      <div class="checkbox-container my-3">
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="subdomains"
+            id="inlineCheckbox1"
+            value="subdomains"
+          />
+          <label class="form-check-label" for="inlineCheckbox1"
+            >Subdomains</label
+          >
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="inlineCheckbox2"
+            name="emails"
+            value="emails"
+          />
+          <label class="form-check-label" for="inlineCheckbox2">E-mails</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="inlineCheckbox2"
+            name="documents"
+            value="documents"
+          />
+          <label class="form-check-label" for="inlineCheckbox2"
+            >Documents</label
+          >
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="inlineCheckbox2"
+            name="applications"
+            value="applications"
+          />
+          <label class="form-check-label" for="inlineCheckbox2"
+            >Applications</label
+          >
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="inlineCheckbox2"
+            name="technologies"
+            value="technologies"
+          />
+          <label class="form-check-label" for="inlineCheckbox2"
+            >Technologies</label
+          >
+         
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  </body>
+</html>

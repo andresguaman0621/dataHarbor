@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+body {
+  background-color: #102133;
+  color: #e0e1dd;
+  font-family: "Poppins", sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  margin-top: -45px;
+  padding: 10px;
+  font-size: 25px;
+}
+
+.header img {
+  height: 50px;
+  margin-bottom: 70px;
+  margin-top: -45px;
+  margin-left: -80px;
+  margin-right: -10px;
+}
+
+.search-container {
+  margin-top: 100px;
+  border-color: #7793a9;
+}
+
+.search-container input {
+  padding: 15px;
+  width: 100%;
+  max-width: 500px;
+  border: none;
+  border-radius: 15px;
+}
+
+.typing-text {
+  color: #7793a9;
+  margin-bottom: 20px;
+  font-size: 55px;
+}
+
+.additional-text {
+  color: #e0e1dd;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.sample-text {
+  color: #ffffff60;
+  margin-top: 3px;
+  font-size: 13px;
+}
+
+.checkbox-container .form-check-inline {
+  margin-right: 9px;
+  margin-top: 0px;
+}
+
+.height {
+  height: 10vh;
+}
+
+.search {
+  position: relative;
+  box-shadow: 0 0 40px rgba(51, 51, 51, 0.1);
+  left: 55px;
+}
+
+.search input {
+  height: 52px;
+  text-indent: 25px;
+  border: 2px solid #415a77;
+}
+
+.search input:focus {
+  box-shadow: none;
+  border: 2px solid #778da9;
+}
+
+.search .fa-search {
+  position: absolute;
+  top: 17.2px;
+  left: 16px;
+  color: #0d1b2a;
+}
+
+.search button {
+  position: absolute;
+  top: 1px;
+  right: 97px;
+  height: 50px;
+  width: 110px;
+  background: #1b263b;
+  border-radius: 10px;
+  color: #e0e1dd;
+  border-color: #445461;
+}

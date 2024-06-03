@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Results</title>
+  </head>
+  <body>
+    <!-- SUBDOMINIOS  -->
+    {% if 'subdomains' in data %}
+    <h1>Subdomains:</h1>
+    {% for subdomain, ip in data['subdomains'].items() %}
+    <p>{{ subdomain }} - {{ ip }}</p>
+    {% endfor %} {% endif %}
+
+    <!-- EMAILS -->
+    {% if 'emails' in data %}
+    <h1>Emails:</h1>
+    {% for email in data['emails']['data']['emails'] %}
+    <p>{{ email['value'] }}</p>
+    {% endfor %} {% endif %}
+
+    <!-- PDFS -->
+    {% if 'pdf_enlaces' in data %}
+    <h2>Archivos PDF:</h2>
+    {% for enlace in data['pdf_enlaces'] %}
+    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
+    {% endfor %} {% endif %}
+
+    <!-- EXCEL -->
+    {% if 'xlsx_enlaces' in data %}
+    <h1>xlsx Files:</h1>
+    {% for enlace in data['xlsx_enlaces'] %}
+    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
+    {% endfor %} {% endif %}
+
+    <!-- PPTX -->
+    {% if 'pptx_enlaces' in data %}
+    <h1>PPTX Files:</h1>
+    {% for enlace in data['pptx_enlaces'] %}
+    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
+    {% endfor %} {% endif %}
+
+    <!-- DOCX  -->
+    {% if 'docx_enlaces' in data %}
+    <h1>DOCX Files:</h1>
+    {% for enlace in data['docx_enlaces'] %}
+    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
+    {% endfor %} {% endif %}
+
+    <!-- MOBILE APPS -->
+    {% if 'mobile_apps' in data %}
+    <h1>Mobile Apps:</h1>
+    {% for app in data['mobile_apps'] %}
+    <p>
+      <strong>{{ app.name }}</strong><br />
+      {% if app.store == 'App Store' %} Version: {{ app.version }}<br />
+      Bundle ID: {{ app.bundle_id }}<br />
+      {% else %} App ID: {{ app.app_id }}<br />
+      {% endif %}
+      <a href="{{ app.url }}" target="_blank">View on {{ app.store }}</a><br />
+      <img
+        src="{{ app.image }}"
+        alt="{{ app.name }} logo"
+        width="100"
+        height="100"
+      />
+    </p>
+    {% endfor %} {% endif %}
+    <!-- TECHNOLOGIES -->
+    {% if 'technologies' in data %}
+    <h1>Tecnologías:</h1>
+    {% if 'error' in data['technologies'] %}
+    <p>{{ data['technologies']['error'] }}</p>
+    {% else %}
+    <p>Request URL: {{ data['technologies']['request'] }}</p>
+    <p>Last Checked: {{ data['technologies']['last_checked'] }}</p>
+    <h2>Results:</h2>
+    {% for result in data['technologies']['results'] %}
+    <div>
+      <h3>{{ result['name'] }}</h3>
+      <p>Version: {{ result['version'] or 'N/A' }}</p>
+      <p>Categories: {{ ', '.join(result['categories']) }}</p>
+      <p>
+        URL:
+        <a href="{{ result['url'] }}" target="_blank">{{ result['url'] }}</a>
+      </p>
+    </div>
+    {% endfor %}
+    <h2>Social Media Profiles:</h2>
+    {% for social in data['technologies']['meta']['social'] %}
+    <div>
+      <p>Network: {{ social['network'] }}</p>
+      <p>
+        URL:
+        <a href="{{ social['url'] }}" target="_blank">{{ social['url'] }}</a>
+      </p>
+      <p>Profile: {{ social['profile'] }}</p>
+    </div>
+    {% endfor %} {% endif %} {% endif %}
+  </body>
+</html>
