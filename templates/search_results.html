@@ -1,100 +1,477 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
-    <title>Search Results</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resultados de la Búsqueda</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        padding-top: 50px;
+      }
+      .card {
+        margin-bottom: 20px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        border-radius: 9px;
+      }
+
+      /* Barra lateral de riesgo */
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 6px;
+      }
+      .riesgo-0::before {
+        background-color: #66bb6a;
+      } /* Verde */
+      .riesgo-1::before {
+        background-color: #81c784;
+      } /* Verde claro */
+      .riesgo-2::before {
+        background-color: #ffa726;
+      } /* Naranja */
+      .riesgo-3::before {
+        background-color: #fb8c00;
+      } /* Naranja oscuro */
+      .riesgo-4::before {
+        background-color: #ef5350;
+      } /* Rojo */
+      .riesgo-5::before {
+        background-color: #d32f2f;
+      } /* Rojo oscuro */
+
+      /* Iconos de categoría */
+      .categoria-icon {
+        width: 48px;
+        height: 48px;
+        margin-right: 5px;
+        vertical-align: text-top;
+      }
+
+      /* Títulos de tarjetas */
+      .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 3px solid #e9ecef;
+        display: flex;
+        align-items: center;
+      }
+      .card-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0;
+        flex-grow: 1;
+      }
+
+      /* Indicador de valoración */
+      .valor-indicador {
+        font-size: 0.9rem;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 20px;
+        color: white;
+      }
+      .valor-0 {
+        background-color: #20c997;
+      }
+      .valor-1 {
+        background-color: #28a745;
+      }
+      .valor-2 {
+        background-color: #fd7e14;
+      }
+      .valor-3 {
+        background-color: #f39c12;
+      }
+      .valor-4 {
+        background-color: #e74c3c;
+      }
+      .valor-5 {
+        background-color: #dc3545;
+      }
+      .btn-outline-info {
+        color: #2f6c76;
+        border-color: #d8e1e2;
+      }
+      .btn-warning {
+        color: #f2f8fd;
+        background-color: #3d73b2;
+        border-color: #c1d5dd;
+      }
+
+      /* NUEVOS ESTILOS */
+      /* Estilos para el encabezado */
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .header img {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        color: #333;
+        margin: 0;
+      }
+
+      /* Estilos para la escala de valoración */
+      .rating-scale {
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .rating-scale h4 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .scale-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        color: white;
+        margin-right: 15px;
+      }
+
+      .extreme {
+        background-color: #d32f2f;
+      }
+      .very-high {
+        background-color: #ef5350;
+      }
+      .high {
+        background-color: #fb8c00;
+      }
+      .medium {
+        background-color: #ffa726;
+      }
+      .low {
+        background-color: #81c784;
+      }
+      .negligible {
+        background-color: #66bb6a;
+      }
+
+      .scale-item div:last-child {
+        flex-grow: 1;
+      }
+    </style>
   </head>
   <body>
-    <!-- SUBDOMINIOS  -->
-    {% if 'subdomains' in data %}
-    <h1>Subdomains:</h1>
-    {% for subdomain, ip in data['subdomains'].items() %}
-    <p>{{ subdomain }} - {{ ip }}</p>
-    {% endfor %} {% endif %}
+    <div class="container">
+      <!-- Logo y nombre de la empresa -->
+      <div class="header my-4">
+        <img
+          src="https://i.ibb.co/s3c7zYX/logo.png"
+          alt="Data Harbor Logo"
+          class="header"
+        />
+        <h1 class="header">Data Harbor</h1>
+      </div>
 
-    <!-- EMAILS -->
-    {% if 'emails' in data %}
-    <h1>Emails:</h1>
-    {% for email in data['emails']['data']['emails'] %}
-    <p>{{ email['value'] }}</p>
-    {% endfor %} {% endif %}
+      <!-- Título principal -->
+      <h2 class="text-center mb-4">Resultados del Análisis de Seguridad</h2>
 
-    <!-- PDFS -->
-    {% if 'pdf_enlaces' in data %}
-    <h2>Archivos PDF:</h2>
-    {% for enlace in data['pdf_enlaces'] %}
-    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
-    {% endfor %} {% endif %}
-
-    <!-- EXCEL -->
-    {% if 'xlsx_enlaces' in data %}
-    <h1>xlsx Files:</h1>
-    {% for enlace in data['xlsx_enlaces'] %}
-    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
-    {% endfor %} {% endif %}
-
-    <!-- PPTX -->
-    {% if 'pptx_enlaces' in data %}
-    <h1>PPTX Files:</h1>
-    {% for enlace in data['pptx_enlaces'] %}
-    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
-    {% endfor %} {% endif %}
-
-    <!-- DOCX  -->
-    {% if 'docx_enlaces' in data %}
-    <h1>DOCX Files:</h1>
-    {% for enlace in data['docx_enlaces'] %}
-    <p><a href="{{ enlace }}" target="_blank">{{ enlace }}</a></p>
-    {% endfor %} {% endif %}
-
-    <!-- MOBILE APPS -->
-    {% if 'mobile_apps' in data %}
-    <h1>Mobile Apps:</h1>
-    {% for app in data['mobile_apps'] %}
-    <p>
-      <strong>{{ app.name }}</strong><br />
-      {% if app.store == 'App Store' %} Version: {{ app.version }}<br />
-      Bundle ID: {{ app.bundle_id }}<br />
-      {% else %} App ID: {{ app.app_id }}<br />
+      <!-- PRINCIPALES SECCIONES -->
+      <!-- SUBDOMINIOS -->
+      {% if 'subdomains' in data %}
+      <div class="card riesgo-1">
+        <div class="card-header">
+          <h2 class="card-title">
+            <img
+              src="https://shorturl.at/dcxCl"
+              alt="Subdominios"
+              class="categoria-icon"
+            />
+            Subdominios
+          </h2>
+          <span class="valor-indicador valor-1" title="Riesgo Bajo">1</span>
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Fecha de escaneo:</strong> {{
+            data['subdomains']['scan_date'] }}
+          </p>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Subdominio</th>
+                <th>IP</th>
+                <th>Cloudflare</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sub in data['subdomains']['subdomains'] %}
+              <tr>
+                <td>{{ sub['subdomain'] }}</td>
+                <td>{{ sub['ip'] }}</td>
+                <td>{% if sub['cloudflare'] %}Sí{% else %}No{% endif %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
       {% endif %}
-      <a href="{{ app.url }}" target="_blank">View on {{ app.store }}</a><br />
-      <img
-        src="{{ app.image }}"
-        alt="{{ app.name }} logo"
-        width="100"
-        height="100"
-      />
-    </p>
-    {% endfor %} {% endif %}
-    <!-- TECHNOLOGIES -->
-    {% if 'technologies' in data %}
-    <h1>Tecnologías:</h1>
-    {% if 'error' in data['technologies'] %}
-    <p>{{ data['technologies']['error'] }}</p>
-    {% else %}
-    <p>Request URL: {{ data['technologies']['request'] }}</p>
-    <p>Last Checked: {{ data['technologies']['last_checked'] }}</p>
-    <h2>Results:</h2>
-    {% for result in data['technologies']['results'] %}
-    <div>
-      <h3>{{ result['name'] }}</h3>
-      <p>Version: {{ result['version'] or 'N/A' }}</p>
-      <p>Categories: {{ ', '.join(result['categories']) }}</p>
-      <p>
-        URL:
-        <a href="{{ result['url'] }}" target="_blank">{{ result['url'] }}</a>
-      </p>
+
+      <!-- EMAILS -->
+      {% if 'emails' in data %}
+      <div class="card riesgo-4">
+        <div class="card-header">
+          <h2 class="card-title">
+            <img
+              src="https://shorturl.at/8V8Ur"
+              alt="Correos Electrónicos"
+              class="categoria-icon"
+            />
+            Correos Electrónicos
+          </h2>
+          <span class="valor-indicador valor-4" title="Riesgo Muy Alto">4</span>
+        </div>
+        <div class="card-body">
+          {% if data['emails'] and data['emails']['data'] and
+          data['emails']['data']['emails'] %}
+          <ul class="list-group">
+            {% for email in data['emails']['data']['emails'] %}
+            <li class="list-group-item">{{ email['value'] }}</li>
+            {% endfor %}
+          </ul>
+          {% elif data['emails'] is string %}
+          <p>{{ data['emails'] }}</p>
+          {% else %}
+          <p class="text-muted">No se encontraron correos electrónicos.</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- ARCHIVOS (PDF, XLSX, PPTX, DOCX) -->
+      {% for file_type in ['pdf', 'xlsx', 'pptx', 'docx'] %} {% set enlaces =
+      data.get(file_type + '_enlaces', []) %} {% if enlaces %}
+      <div class="card riesgo-2">
+        <div class="card-header">
+          <h2 class="card-title">
+            <img
+              src="https://shorturl.at/iFg3i"
+              alt="Documentos"
+              class="categoria-icon"
+            />
+            Archivos {{ file_type.upper() }}
+          </h2>
+          <span class="valor-indicador valor-2" title="Riesgo Medio">2</span>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            {% for enlace in enlaces %}
+            <li class="list-group-item">
+              <a
+                href="{{ enlace }}"
+                target="_blank"
+                class="btn btn-outline-info btn-sm"
+                >{{ enlace }}</a
+              >
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %} {% endfor %}
+
+      <!-- MOBILE APPS -->
+      {% if 'mobile_apps' in data %}
+      <div class="card riesgo-0">
+        <div class="card-header">
+          <h2 class="card-title">
+            <img
+              src="https://shorturl.at/nXfwr"
+              alt="Aplicaciones Móviles"
+              class="categoria-icon"
+            />
+            Aplicaciones Móviles
+          </h2>
+          <span class="valor-indicador valor-0" title="Riesgo Despreciable"
+            >0</span
+          >
+        </div>
+        <div class="card-body">
+          <div class="row">
+            {% for app in data['mobile_apps'] %}
+            <div class="col-md-3 mb-3">
+              <div class="card h-100">
+                <img
+                  src="{{ app.image }}"
+                  class="card-img-top"
+                  alt="{{ app.name }} logo"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{ app.name }}</h5>
+                  <p class="card-text">
+                    {% if app.store == 'App Store' %} Versión: {{ app.version
+                    }}<br />
+                    Bundle ID: {{ app.bundle_id }} {% else %} App ID: {{
+                    app.app_id }} {% endif %}
+                  </p>
+                  <a
+                    href="{{ app.url }}"
+                    target="_blank"
+                    class="btn btn-warning"
+                    >Ver en {{ app.store }}</a
+                  >
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- TECHNOLOGIES -->
+      {% if 'technologies' in data %}
+      <div class="card riesgo-2">
+        <div class="card-header">
+          <h2 class="card-title">
+            <img
+              src="https://shorturl.at/ECRB5"
+              alt="Tecnologías"
+              class="categoria-icon"
+            />
+            Tecnologías
+          </h2>
+          <span class="valor-indicador valor-2" title="Riesgo Medio">2</span>
+        </div>
+        <div class="card-body">
+          {% if 'error' in data['technologies'] %}
+          <p class="text-danger">{{ data['technologies']['error'] }}</p>
+          {% else %}
+          <p>
+            <strong>URL analizada:</strong> {{ data['technologies']['request']
+            }}
+          </p>
+          <p>
+            <strong>Última verificación:</strong> {{
+            data['technologies']['last_checked'] }}
+          </p>
+
+          <h3>Resultados:</h3>
+          <div class="list-group">
+            {% for result in data['technologies']['results'] %}
+            <div class="list-group-item">
+              <h4>{{ result['name'] }}</h4>
+              <p>Versión: {{ result['version'] or 'N/A' }}</p>
+              <p>Categorías: {{ ', '.join(result['categories']) }}</p>
+              <a
+                href="{{ result['url'] }}"
+                target="_blank"
+                class="btn btn-outline-secondary btn-sm"
+                >Más información</a
+              >
+            </div>
+            {% endfor %}
+          </div>
+
+          <h3 class="mt-4">Perfiles de Redes Sociales:</h3>
+          <div class="list-group">
+            {% for social in data['technologies']['meta']['social'] %}
+            <div class="list-group-item">
+              <h5>{{ social['network'] }}</h5>
+              <p>Perfil: {{ social['profile'] }}</p>
+              <a
+                href="{{ social['url'] }}"
+                target="_blank"
+                class="btn btn-outline-secondary btn-sm"
+                >Visitar perfil</a
+              >
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
     </div>
-    {% endfor %}
-    <h2>Social Media Profiles:</h2>
-    {% for social in data['technologies']['meta']['social'] %}
-    <div>
-      <p>Network: {{ social['network'] }}</p>
-      <p>
-        URL:
-        <a href="{{ social['url'] }}" target="_blank">{{ social['url'] }}</a>
-      </p>
-      <p>Profile: {{ social['profile'] }}</p>
-    </div>
-    {% endfor %} {% endif %} {% endif %}
+
+     <!-- Escala de valoración al final -->
+     <div class="rating-scale">
+      <h4>Escala de Valoración (0-5)</h4>
+      <div class="scale-item">
+          <div class="circle extreme">5</div>
+          <div>
+              <strong>Extremo</strong><br>
+              Daño extremadamente grave: El activo es crítico para la operación de la empresa y su pérdida o compromiso tendría consecuencias catastróficas.
+          </div>
+      </div>
+      <div class="scale-item">
+          <div class="circle very-high">4</div>
+          <div>
+              <strong>Muy Alto</strong><br>
+              Daño muy grave: El activo es esencial para las operaciones y su pérdida causaría un impacto significativo en la empresa y posiblemente en otras organizaciones.
+          </div>
+      </div>
+      <div class="scale-item">
+          <div class="circle high">3</div>
+          <div>
+              <strong>Alto</strong><br>
+              Daño grave: El activo es importante para las operaciones y su pérdida tendría un impacto significativo en la empresa.
+          </div>
+      </div>
+      <div class="scale-item">
+          <div class="circle medium">2</div>
+          <div>
+              <strong>Medio</strong><br>
+              Daño importante: El activo tiene un valor significativo pero su pérdida no sería catastrófica.
+          </div>
+      </div>
+      <div class="scale-item">
+          <div class="circle low">1</div>
+          <div>
+              <strong>Bajo</strong><br>
+              Daño menor: El activo tiene un valor limitado y su pérdida tendría un impacto mínimo en la empresa.
+          </div>
+      </div>
+      <div class="scale-item">
+          <div class="circle negligible">0</div>
+          <div>
+              <strong>Despreciable</strong><br>
+              Irrelevante a efectos prácticos: El activo no tiene valor significativo y su pérdida no tendría impacto en la empresa.
+          </div>
+      </div>
+  </div>
+</div>
+    <!-- Bootstrap JS y dependencias -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>
 </html>
