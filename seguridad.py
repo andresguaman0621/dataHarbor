@@ -162,6 +162,7 @@ def search_results():
 
         if response.status_code == 200:
             data['technologies'] = response.json()
+            print('hola')
         else:
             data['technologies'] = {'error': f'Error al obtener las tecnologías: {response.status_code}'}
 
