@@ -53,8 +53,14 @@ body {
 }
 
 .checkbox-container .form-check-inline {
-  margin-right: 9px;
+  margin-right: 12px;
   margin-top: 0px;
+}
+
+.mb-3,
+.my-3 {
+  margin-bottom: 1rem !important;
+  margin-left: 22px;
 }
 
 .height {
