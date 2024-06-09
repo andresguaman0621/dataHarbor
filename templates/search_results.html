@@ -13,9 +13,11 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    
     <style>
       body {
         padding-top: 50px;
+        font-family: "Poppins", sans-serif;
       }
       .card {
         margin-bottom: 20px;
@@ -106,6 +108,12 @@
         color: #2f6c76;
         border-color: #d8e1e2;
       }
+
+      .btn-outline-info:hover {
+    color: #2f6c76;
+    background-color: #7ea1a739;
+    border-color: #17a2b82e;
+}
       .btn-warning {
         color: #f2f8fd;
         background-color: #3d73b2;
@@ -116,34 +124,36 @@
       /* Estilos para el encabezado */
       .header {
         display: flex;
-        align-items: center;
-        margin-bottom: 30px;
+        align-items: flex-start;
+        margin-top: -60px;
+        padding: 10px;
+        font-size: 40px;
+        margin-bottom: -100px;
+        
       }
 
       .header img {
-        width: 50px;
-        height: 50px;
-        margin-right: 15px;
-      }
-
-      .header h1 {
-        font-size: 2rem;
-        color: #333;
-        margin: 0;
+        height: 70px;
+        
+        
+        margin-left: -20px;
+        
       }
 
       /* Estilos para la escala de valoración */
       .rating-scale {
         margin-top: 40px;
-        padding: 20px;
+        padding: 90px;
         background-color: #f8f9fa;
-        border-radius: 10px;
+        border-radius: 5px;
+        margin-bottom: -40px;
       }
 
       .rating-scale h4 {
         font-size: 1.2rem;
         margin-bottom: 20px;
         color: #333;
+        margin-top: -35px;
       }
 
       .scale-item {
@@ -186,22 +196,62 @@
       .scale-item div:last-child {
         flex-grow: 1;
       }
+
+              /* Estilos para el footer */
+.footer {
+  background-color: #343a40;
+  color: #f8f9fa;
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+}
+
+.footer-links a {
+  color: #f8f9fa;
+  margin-left: 15px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.separator {
+    border: none;
+    height: 1px;
+    background-color: #00000014;
+    margin: 20px auto;
+    width: 113.5%;
+    margin-left: -75px;
+}
+
     </style>
   </head>
   <body>
     <div class="container">
       <!-- Logo y nombre de la empresa -->
       <div class="header my-4">
+
         <img
-          src="https://i.ibb.co/s3c7zYX/logo.png"
+          src="https://shorturl.at/BpUit"
           alt="Data Harbor Logo"
           class="header"
         />
         <h1 class="header">Data Harbor</h1>
       </div>
-
+      <hr class="separator">
       <!-- Título principal -->
-      <h2 class="text-center mb-4">Resultados del Análisis de Seguridad</h2>
+      <h2 class="mb-4">Resultados del Análisis de Seguridad</h2>
 
       <!-- PRINCIPALES SECCIONES -->
       <!-- SUBDOMINIOS -->
@@ -219,10 +269,7 @@
           <span class="valor-indicador valor-1" title="Riesgo Bajo">1</span>
         </div>
         <div class="card-body">
-          <p>
-            <strong>Fecha de escaneo:</strong> {{
-            data['subdomains']['scan_date'] }}
-          </p>
+          
           <table class="table table-striped">
             <thead>
               <tr>
@@ -277,36 +324,37 @@
       {% endif %}
 
       <!-- ARCHIVOS (PDF, XLSX, PPTX, DOCX) -->
-      {% for file_type in ['pdf', 'xlsx', 'pptx', 'docx'] %} {% set enlaces =
-      data.get(file_type + '_enlaces', []) %} {% if enlaces %}
-      <div class="card riesgo-2">
-        <div class="card-header">
-          <h2 class="card-title">
-            <img
-              src="https://shorturl.at/iFg3i"
-              alt="Documentos"
-              class="categoria-icon"
-            />
+
+      {% set imagenes = {
+        'pdf': 'https://shorturl.at/s9L0X',
+        'xlsx': 'https://shorturl.at/4VYIn',
+        'pptx': 'https://shorturl.at/VZdSp',
+        'docx': 'https://shorturl.at/DIHYs'
+    } %}
+
+      {% for file_type in ['pdf', 'xlsx', 'pptx', 'docx'] %} 
+{% set enlaces = data.get(file_type + '_enlaces', []) %} 
+{% if enlaces %}
+<div class="card riesgo-2">
+    <div class="card-header">
+        <h2 class="card-title">
+            <img src="{{ imagenes[file_type] }}" alt="Documentos {{ file_type.upper() }}" class="categoria-icon" />
             Archivos {{ file_type.upper() }}
-          </h2>
-          <span class="valor-indicador valor-2" title="Riesgo Medio">2</span>
-        </div>
-        <div class="card-body">
-          <ul class="list-group">
+        </h2>
+        <span class="valor-indicador valor-2" title="Riesgo Medio">2</span>
+    </div>
+    <div class="card-body">
+        <ul class="list-group">
             {% for enlace in enlaces %}
             <li class="list-group-item">
-              <a
-                href="{{ enlace }}"
-                target="_blank"
-                class="btn btn-outline-info btn-sm"
-                >{{ enlace }}</a
-              >
+                <a href="{{ enlace }}" target="_blank" class="btn btn-outline-info btn-sm">{{ enlace }}</a>
             </li>
             {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% endif %} {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %} 
+{% endfor %}
 
       <!-- MOBILE APPS -->
       {% if 'mobile_apps' in data %}
@@ -345,7 +393,7 @@
                   <a
                     href="{{ app.url }}"
                     target="_blank"
-                    class="btn btn-warning"
+                    class="btn btn-outline-secondary btn-sm"
                     >Ver en {{ app.store }}</a
                   >
                 </div>
@@ -375,16 +423,15 @@
           {% if 'error' in data['technologies'] %}
           <p class="text-danger">{{ data['technologies']['error'] }}</p>
           {% else %}
-          <p>
+          <!-- <p>
             <strong>URL analizada:</strong> {{ data['technologies']['request']
             }}
           </p>
           <p>
             <strong>Última verificación:</strong> {{
             data['technologies']['last_checked'] }}
-          </p>
+          </p> -->
 
-          <h3>Resultados:</h3>
           <div class="list-group">
             {% for result in data['technologies']['results'] %}
             <div class="list-group-item">
@@ -469,6 +516,29 @@
       </div>
   </div>
 </div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-text">
+        &copy; 2024 Data Harbor. Todos los derechos reservados.
+      </div>
+      <div class="footer-links">
+        <a href="#" target="_blank">Términos de Servicio</a>
+        <a href="#" target="_blank">Política de Privacidad</a>
+        <a href="#" target="_blank">Contacto</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
     <!-- Bootstrap JS y dependencias -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
