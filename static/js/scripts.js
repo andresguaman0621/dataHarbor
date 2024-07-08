@@ -13,12 +13,16 @@ function typeWriter() {
 
 typeWriter();
 
-// ANIMACION DE CARGA
+//ANIMACION DE ESPERA
 document.addEventListener("DOMContentLoaded", function () {
+  // DESENFOQUE EN PANTALLA
   const form = document.querySelector("form");
-  const loadingMessage = document.getElementById("loadingMessage");
+  const loadingOverlay = document.getElementById("loadingOverlay");
+  const mainContent = document.getElementById("mainContent");
 
+  // MENSAJE ESPERA
   form.addEventListener("submit", function (e) {
-    loadingMessage.style.display = "block";
+    loadingOverlay.style.display = "flex";
+    mainContent.classList.add("content-blur");
   });
 });

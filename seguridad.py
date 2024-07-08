@@ -1,17 +1,16 @@
-
 #Manejo de archivos json
 import json
 
-#Manejo acractaeristicas del sistema
+#Manejo caractaeristicas del sistema
 import os
 
-#conectar Frontend
+#conectar Frontend, framework
 from flask import Flask, render_template, request
 
 #Llamado API
 import requests
 
-#Busqueda evanazada
+#Busqueda evanazada en google
 from googleapiclient.discovery import build 
 from google_play_scraper import search
 
@@ -20,12 +19,13 @@ app = Flask(__name__)
 
 #APIS EN VARIBALES DEL SISTEMA
 API_KEYS = {
-    'subdomain_finder': os.environ.get('SUBDOMAIN_API'),
-    'hunter_io': os.environ.get('EMAIL_API'),
-    'google_search': os.environ.get('GOOGLE_API'),
-    'whatcms': os.environ.get('CMS_API')
+    'subdomain_finder': os.environ.get('SUBDOMAIN_API'), #subdominios
+    'hunter_io': os.environ.get('EMAIL_API'), #correos
+    'google_search': os.environ.get('GOOGLE_API'), #documentos
+    'whatcms': os.environ.get('CMS_API') #tecnologias
 }
-GOOGLE_CSE_ID = os.environ.get('CSE_ID')
+GOOGLE_CSE_ID = os.environ.get('CSE_ID') #id de buscador
+
 
 #FUNCION PARA BUSCAR SUBDOMINIOS
 def search_subdomains(domain):
@@ -60,7 +60,7 @@ def search_apps_in_app_store(domain):
         "term": domain,
         "entity": "software",
         "country": "us",
-        "limit": 5
+        "limit": 4
     }
     response = requests.get("https://itunes.apple.com/search", params=params)
     if response.status_code == 200:
@@ -77,7 +77,7 @@ def search_apps_in_app_store(domain):
 
 #FUNCION PARA BUSCAR APPS EN PLAY STORE
 def search_apps_in_play_store(domain):
-    results = search(domain, n_hits=5, lang='en', country='us')
+    results = search(domain, n_hits=4, lang='en', country='us')
     return [{
         "name": app.get("title"),
         "app_id": app.get("appId"),
@@ -102,6 +102,7 @@ def search_technologies(domain):
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 #ARMAR URL
 @app.route('/search_results', methods=['POST'])

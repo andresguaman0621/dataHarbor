@@ -4,7 +4,7 @@
   <head>
     <title>Data Harbor</title>
 
-    <!-- Enlaces a hojas de estilo externas -->
+    <!-- Enlaces a hojas de estilo externas importacion de elementos-->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -12,7 +12,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ url_for('static', filename='css/styles.css') }}"
+      href="{{ url_for('static', filename='css/styless.css') }}"
     />
     <link
       rel="stylesheet"
@@ -24,7 +24,10 @@
     />
     <link rel="shortcut icon" href="https://shorturl.at/tQHwn">
   </head>
+
   <body>
+    <!-- CAPA PRINCIPAL -->
+    <div id="mainContent">
     <div class="container text-center my-5">
 
 
@@ -37,7 +40,7 @@
 
       <!-- Sección de búsqueda -->
       <div class="search-container my-5">
-        <!-- METODO PARA CONECTAR CON BACKEDN -->
+        <!-- METODO PARA CONECTAR CON BACKEND -->
         <form action="{{ url_for('search_results') }}" method="POST">
         <h2 class="typing-text"></h2>
         <p class="additional-text">
@@ -65,12 +68,15 @@
                 <button type="submit" class="btn btn-primary" >Buscar</button>
 
                 <!-- Animacion de carga -->
-                <div id="loadingMessage" style="display: none;">
+                <!-- <div id="loadingMessage" style="display: none;">
                   <div class="spinner-border text-primary" role="status">
                       <span class="sr-only">Cargando...</span>
                   </div>
                   <span>Esto puede tardar unos segundos...</span>
-              </div>
+              </div> -->
+
+
+
               </div>
             </div>
           </div>
@@ -172,12 +178,28 @@
         </div>
       </div>
     </div>
+  </div>
 
     
+  <!-- ANIMACION DE ESPERA -->
+   <!-- CAPA DE ESPERA -->
+  <div id="loadingOverlay" style="display: none;">
+    <div id="loadingMessage">
+      <dotlottie-player src="https://lottie.host/f21645d8-deae-4e96-b72f-4809d05cda76/CL3J4EcE2E.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
+      <p>Esto puede tardar unos segundos...</p>
+        
+    </div>
+</div>
+
+
+</div>
+    
     <!-- Scripts de JavaScript -->
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   </body>
 </html>
+

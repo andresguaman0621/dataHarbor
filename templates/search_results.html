@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resultados de la Búsqueda</title>
 
-    <!-- Enlaces a hojas de estilo externas -->
+    <!-- Enlaces a hojas de estilo externas importacion -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -14,7 +14,10 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    
+    <!-- REFERENCIA CSS PARA DAT ESTILO -->
     <link
+    
       rel="stylesheet"
       type="text/css"
       href="{{ url_for('static', filename='css/srstyles.css') }}"
@@ -35,6 +38,7 @@
         <h1 class="header">Data Harbor</h1>
       </div>
       <hr class="separator">
+
       <!-- Título principal -->
       <h2 class="mb-4">Resultados del Análisis de Seguridad</h2>
 
@@ -215,8 +219,7 @@
             />
             Aplicaciones Móviles
           </h2>
-          <!-- CAMBIOS -->
-           <!-- CAMBIOS -->
+        
           <button class="valor-indicador valor-0" title="Riesgo Despreciable" onclick="scrollToRatingScale()"
             >0</button
           >
