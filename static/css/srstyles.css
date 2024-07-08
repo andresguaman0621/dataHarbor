@@ -68,7 +68,18 @@ body {
   padding: 5px 10px;
   border-radius: 20px;
   color: white;
+  border: none;
+  cursor: pointer;
 }
+
+.valor-indicador:hover {
+  opacity: 0.8;
+}
+
+.valor-indicador:focus {
+  outline: none;
+}
+
 .valor-0 {
   background-color: #20c997;
 }
@@ -213,4 +224,13 @@ body {
   margin: 20px auto;
   width: 113.5%;
   margin-left: -75px;
+}
+
+#loadingMessage {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.spinner-border {
+  margin-right: 10px;
 }

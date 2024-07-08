@@ -1,10 +1,14 @@
+/* Importación de fuentes */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+
+/* Estilos generales del body */
 body {
   background-color: #102133;
   color: #e0e1dd;
   font-family: "Poppins", sans-serif;
 }
 
+/* Estilos del encabezado */
 .header {
   display: flex;
   align-items: flex-start;
@@ -21,6 +25,7 @@ body {
   margin-right: -10px;
 }
 
+/* Estilos del contenedor de búsqueda */
 .search-container {
   margin-top: 100px;
   border-color: #7793a9;
@@ -34,6 +39,7 @@ body {
   border-radius: 15px;
 }
 
+/* Estilos de los textos */
 .typing-text {
   color: #7793a9;
   margin-bottom: 20px;
@@ -52,6 +58,7 @@ body {
   font-size: 13px;
 }
 
+/* Estilos de los checkboxes */
 .checkbox-container .form-check-inline {
   margin-right: 12px;
   margin-top: 0px;
@@ -67,6 +74,7 @@ body {
   height: 10vh;
 }
 
+/* Estilos de la barra de búsqueda */
 .search {
   position: relative;
   box-shadow: 0 0 40px rgba(51, 51, 51, 0.1);

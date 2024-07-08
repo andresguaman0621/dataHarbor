@@ -1,177 +1,143 @@
-from flask import Flask, render_template, request, redirect, url_for
-import http.client, json, http.client, urllib.parse, requests, re
-from bs4 import BeautifulSoup
+
+#Manejo de archivos json
+import json
+
+#Manejo acractaeristicas del sistema
+import os
+
+#conectar Frontend
+from flask import Flask, render_template, request
+
+#Llamado API
+import requests
+
+#Busqueda evanazada
 from googleapiclient.discovery import build 
 from google_play_scraper import search
 
 app = Flask(__name__)
 
-# Función para buscar archivos utilizando la API de Google
-def search_files(api_key, cse_id, query):
-    service = build("customsearch", "v1", developerKey=api_key)
-    res = service.cse().list(q=query, cx=cse_id, num=5, filter=0).execute()
+
+#APIS EN VARIBALES DEL SISTEMA
+API_KEYS = {
+    'subdomain_finder': os.environ.get('SUBDOMAIN_API'),
+    'hunter_io': os.environ.get('EMAIL_API'),
+    'google_search': os.environ.get('GOOGLE_API'),
+    'whatcms': os.environ.get('CMS_API')
+}
+GOOGLE_CSE_ID = os.environ.get('CSE_ID')
+
+#FUNCION PARA BUSCAR SUBDOMINIOS
+def search_subdomains(domain):
+    url = f"https://subdomain-finder3.p.rapidapi.com/v1/subdomain-finder/?domain={domain}"
+    headers = {
+        'X-RapidAPI-Key': API_KEYS['subdomain_finder'],
+        'X-RapidAPI-Host': "subdomain-finder3.p.rapidapi.com"
+    }
+    response = requests.get(url, headers=headers)
+    return response.json() if response.status_code == 200 else None
+
+#FUNCION PARA BUSCAR CORREOS
+def search_emails(domain, company=''):
+    params = {
+        'domain': domain,
+        'company': company,
+        'api_key': API_KEYS['hunter_io']
+    }
+    url = f"https://api.hunter.io/v2/domain-search?{requests.compat.urlencode(params)}"
+    response = requests.get(url)
+    return response.json() if response.status_code == 200 else None
+
+#FUNCION PARA BUSCAR ARCHIVOS
+def search_files(query):
+    service = build("customsearch", "v1", developerKey=API_KEYS['google_search'])
+    res = service.cse().list(q=query, cx=GOOGLE_CSE_ID, num=5, filter=0).execute()
     return [item['link'] for item in res.get('items', [])]
 
-# Función para buscar aplicaciones en App Store
+#FUNCION PARA BUSCAR APPS EN APP STORE
 def search_apps_in_app_store(domain):
-    base_url = "https://itunes.apple.com/search"
     params = {
         "term": domain,
         "entity": "software",
         "country": "us",
         "limit": 5
     }
-    response = requests.get(base_url, params=params)
-    
+    response = requests.get("https://itunes.apple.com/search", params=params)
     if response.status_code == 200:
         data = response.json()
-        results = data.get("results", [])
-        apps = []
-        for app in results:
-            name = app.get("trackName")
-            version = app.get("version")
-            bundle_id = app.get("bundleId")
-            app_url = app.get("trackViewUrl")
-            app_image = app.get("artworkUrl100")
-            apps.append({
-                "name": name,
-                "version": version,
-                "bundle_id": bundle_id,
-                "url": app_url,
-                "image": app_image,
-                "store": "App Store"
-            })
-        return apps
-    else:
-        print(f"Error: Unable to fetch data from App Store (status code {response.status_code})")
-        return []
-    
-# Función para buscar aplicaciones en Play Store
+        return [{
+            "name": app.get("trackName"),
+            "version": app.get("version"),
+            "bundle_id": app.get("bundleId"),
+            "url": app.get("trackViewUrl"),
+            "image": app.get("artworkUrl100"),
+            "store": "App Store"
+        } for app in data.get("results", [])]
+    return []
+
+#FUNCION PARA BUSCAR APPS EN PLAY STORE
 def search_apps_in_play_store(domain):
     results = search(domain, n_hits=5, lang='en', country='us')
-    apps = []
-    for app in results:
-        name = app.get("title")
-        app_id = app.get("appId")
-        app_url = f"https://play.google.com/store/apps/details?id={app_id}"
-        app_image = app.get("icon")
-        apps.append({
-            "name": name,
-            "app_id": app_id,
-            "url": app_url,
-            "image": app_image,
-            "store": "Play Store"
-        })
-    return apps
+    return [{
+        "name": app.get("title"),
+        "app_id": app.get("appId"),
+        "url": f"https://play.google.com/store/apps/details?id={app.get('appId')}",
+        "image": app.get("icon"),
+        "store": "Play Store"
+    } for app in results]
 
-# Función para buscar aplicaciones en ambas tiendas
-def search_apps_by_domain(domain):
-    app_store_apps = search_apps_in_app_store(domain)
-    play_store_apps = search_apps_in_play_store(domain)
-    return app_store_apps + play_store_apps
+#FUNCION PARA BUSCAR TECNOLOGIAS 
+def search_technologies(domain):
+    params = {
+        "key": API_KEYS['whatcms'],
+        "url": domain
+    }
+    response = requests.get("https://whatcms.org/API/Tech", params=params)
+    return response.json() if response.status_code == 200 else {'error': f'Error al obtener las tecnologías: {response.status_code}'}
 
+
+#PROGARAMA FUNCIONAL
+
+#ARMAR URL
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#ARMAR URL
 @app.route('/search_results', methods=['POST'])
 def search_results():
     domain = request.form['domain']
-    company = request.form.get('company', '')  # valor vacío por defecto
+    company = request.form.get('company', '')
+    
+    checks = {
+        'subdomains': 'subdomains' in request.form,
+        'emails': 'emails' in request.form,
+        'documents': 'documents' in request.form,
+        'applications': 'applications' in request.form,
+        'technologies': 'technologies' in request.form
+    }
 
-    subdomains_checked = 'subdomains' in request.form
-    emails_checked = 'emails' in request.form
-    documents_checked = 'documents' in request.form
-    apps_checked = 'applications' in request.form
-    technologies_checked = 'technologies' in request.form
-
+    #ALMACENA TODA LA INFORMACION
     data = {}
     
-    #checkbox subdoominios
-    if subdomains_checked:
-        conn = http.client.HTTPSConnection("subdomain-finder3.p.rapidapi.com")
-        headers = {
-            'X-RapidAPI-Key': "a78697f918mshef91a67050ba8c8p1d9dedjsn7ed9b8e6705a",
-            'X-RapidAPI-Host': "subdomain-finder3.p.rapidapi.com"
-        }
-        conn.request("GET", f"/v1/subdomain-finder/?domain={domain}", headers=headers)
-        res = conn.getresponse()
-        data['subdomains'] = json.loads(res.read().decode("utf-8"))        
+    if checks['subdomains']:
+        data['subdomains'] = search_subdomains(domain)
     
+    if checks['emails']:
+        data['emails'] = search_emails(domain, company)
     
-    #checkbox emails
-    if emails_checked:
-        api_key = "225ddb3cfa53cdae1afe2cf6e4663e8d808f94cd"
-        conn = http.client.HTTPSConnection("api.hunter.io")
-        headers = {
-            'Content-Type': "application/json",
-            'Accept': "application/json"
-        }
-        params = {
-            'domain': domain,
-            'company': company,
-            'api_key': api_key
-        }
-        conn.request("GET", f"/v2/domain-search?{urllib.parse.urlencode(params)}", headers=headers)
-        res = conn.getresponse()
-        data['emails'] = json.loads(res.read().decode("utf-8"))
+    if checks['documents']:
+        for file_type in ['pdf', 'xlsx', 'pptx', 'docx']:
+            query = f"site:{domain} filetype:{file_type}"
+            data[f'{file_type}_enlaces'] = search_files(query)
     
-    #checkbox documentos
-    if documents_checked:
-        api_key = 'AIzaSyD1gBEpncfgy8vF_s9EWd8irMIsphI9m1c'  
-        cse_id = '51f926aad6df246f9'  
+    if checks['applications']:
+        data['mobile_apps'] = search_apps_in_app_store(domain) + search_apps_in_play_store(domain)
         
-        ##
-        # Buscar archivos PDF en Google
-        ##
-        pdf_query = f"site:{domain} filetype:pdf"
-        data['pdf_enlaces'] = search_files(api_key, cse_id, pdf_query)
-        
-        ##
-        # Buscar archivos EXCEL en Google
-        ##
-        xlsx_query = f"site:{domain} filetype:xlsx"
-        data['xlsx_enlaces'] = search_files(api_key, cse_id, xlsx_query)
-        
-        ##
-        # Buscar archivos PPTX en Google
-        ##
-        pptx_query = f"site:{domain} filetype:pptx"
-        data['pptx_enlaces'] = search_files(api_key, cse_id, pptx_query)
-        
-        ##
-        # Buscar archivos DOCX en Google
-        ##
-        docx_query = f"site:{domain} filetype:docx"
-        data['docx_enlaces'] = search_files(api_key, cse_id, docx_query)
-    
-    #checkbox applicaciones moviles
-    if apps_checked:
-        data['mobile_apps'] = search_apps_by_domain(domain)
-        
-   # checkbox technologies
-    if technologies_checked:
-        api_key = "w3j8vx0maawo0mim295dluqdmoctfgcxemeougfnqz3bs1iqjqvxndmdgl2pjg4ly81l7k"
-        response = requests.get(
-            "https://whatcms.org/API/Tech",
-            params={
-                "key": api_key,
-                "url": domain
-            }
-        )
-
-        if response.status_code == 200:
-            data['technologies'] = response.json()
-            print('hola')
-        else:
-            data['technologies'] = {'error': f'Error al obtener las tecnologías: {response.status_code}'}
+    if checks['technologies']:
+        data['technologies'] = search_technologies(domain)
 
     return render_template('search_results.html', data=data)
     
-# if __name__ == '__main__':
-#     app.run(debug=True)
-    
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
-
-
+    app.run(debug=True)

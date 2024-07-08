@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resultados de la Búsqueda</title>
-    <!-- Bootstrap CSS -->
+
+    <!-- Enlaces a hojas de estilo externas -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -22,6 +23,7 @@
   </head>
   <body>
     <div class="container">
+
       <!-- Logo y nombre de la empresa -->
       <div class="header my-4">
 
@@ -37,43 +39,6 @@
       <h2 class="mb-4">Resultados del Análisis de Seguridad</h2>
 
       <!-- PRINCIPALES SECCIONES -->
-      <!-- SUBDOMINIOS -->
-      {% if 'subdomains' in data %}
-      <div class="card riesgo-1">
-        <div class="card-header">
-          <h2 class="card-title">
-            <img
-              src="https://shorturl.at/dcxCl"
-              alt="Subdominios"
-              class="categoria-icon"
-            />
-            Subdominios
-          </h2>
-          <span class="valor-indicador valor-1" title="Riesgo Bajo">1</span>
-        </div>
-        <div class="card-body">
-          
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Subdominio</th>
-                <th>IP</th>
-                <th>Cloudflare</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for sub in data['subdomains']['subdomains'] %}
-              <tr>
-                <td>{{ sub['subdomain'] }}</td>
-                <td>{{ sub['ip'] }}</td>
-                <td>{% if sub['cloudflare'] %}Sí{% else %}No{% endif %}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      {% endif %}
 
       <!-- EMAILS -->
       {% if 'emails' in data %}
@@ -81,13 +46,13 @@
         <div class="card-header">
           <h2 class="card-title">
             <img
-              src="https://shorturl.at/8V8Ur"
+              src="https://shorturl.at/cLjIm"
               alt="Correos Electrónicos"
               class="categoria-icon"
             />
             Correos Electrónicos
           </h2>
-          <span class="valor-indicador valor-4" title="Riesgo Muy Alto">4</span>
+          <button class="valor-indicador valor-4" title="Riesgo Muy Alto" onclick="scrollToRatingScale()">4</button>
         </div>
         <div class="card-body">
           {% if data['emails'] and data['emails']['data'] and
@@ -106,114 +71,60 @@
       </div>
       {% endif %}
 
+
       <!-- ARCHIVOS (PDF, XLSX, PPTX, DOCX) -->
 
       {% set imagenes = {
-        'pdf': 'https://shorturl.at/s9L0X',
-        'xlsx': 'https://shorturl.at/4VYIn',
-        'pptx': 'https://shorturl.at/VZdSp',
-        'docx': 'https://shorturl.at/DIHYs'
+        'pdf': 'https://shorturl.at/xdjNt',
+        'xlsx': 'https://shorturl.at/W78Ei',
+        'pptx': 'https://shorturl.at/IC3BT',
+        'docx': 'https://shorturl.at/f81JK'
     } %}
 
       {% for file_type in ['pdf', 'xlsx', 'pptx', 'docx'] %} 
-{% set enlaces = data.get(file_type + '_enlaces', []) %} 
-{% if enlaces %}
-<div class="card riesgo-2">
-    <div class="card-header">
-        <h2 class="card-title">
-            <img src="{{ imagenes[file_type] }}" alt="Documentos {{ file_type.upper() }}" class="categoria-icon" />
-            Archivos {{ file_type.upper() }}
-        </h2>
-        <span class="valor-indicador valor-2" title="Riesgo Medio">2</span>
-    </div>
-    <div class="card-body">
-        <ul class="list-group">
-            {% for enlace in enlaces %}
-            <li class="list-group-item">
-                <a href="{{ enlace }}" target="_blank" class="btn btn-outline-info btn-sm">{{ enlace }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-{% endif %} 
-{% endfor %}
-
-      <!-- MOBILE APPS -->
-      {% if 'mobile_apps' in data %}
-      <div class="card riesgo-0">
-        <div class="card-header">
-          <h2 class="card-title">
-            <img
-              src="https://shorturl.at/nXfwr"
-              alt="Aplicaciones Móviles"
-              class="categoria-icon"
-            />
-            Aplicaciones Móviles
-          </h2>
-          <span class="valor-indicador valor-0" title="Riesgo Despreciable"
-            >0</span
-          >
-        </div>
-        <div class="card-body">
-          <div class="row">
-            {% for app in data['mobile_apps'] %}
-            <div class="col-md-3 mb-3">
-              <div class="card h-100">
-                <img
-                  src="{{ app.image }}"
-                  class="card-img-top"
-                  alt="{{ app.name }} logo"
-                />
-                <div class="card-body">
-                  <h5 class="card-title">{{ app.name }}</h5>
-                  <p class="card-text">
-                    {% if app.store == 'App Store' %} Versión: {{ app.version
-                    }}<br />
-                    Bundle ID: {{ app.bundle_id }} {% else %} App ID: {{
-                    app.app_id }} {% endif %}
-                  </p>
-                  <a
-                    href="{{ app.url }}"
-                    target="_blank"
-                    class="btn btn-outline-secondary btn-sm"
-                    >Ver en {{ app.store }}</a
-                  >
-                </div>
-              </div>
-            </div>
-            {% endfor %}
+      {% set enlaces = data.get(file_type + '_enlaces', []) %} 
+      {% if enlaces %}
+      <div class="card riesgo-2">
+          <div class="card-header">
+              <h2 class="card-title">
+                  <img src="{{ imagenes[file_type] }}" alt="Documentos {{ file_type.upper() }}" class="categoria-icon" />
+                  Archivos {{ file_type.upper() }}
+              </h2>
+              <button class="valor-indicador valor-2" title="Riesgo Medio" onclick="scrollToRatingScale()">2</button>
           </div>
-        </div>
+          <div class="card-body">
+              <ul class="list-group">
+                  {% for enlace in enlaces %}
+                  <li class="list-group-item">
+                      <a href="{{ enlace }}" target="_blank" class="btn btn-outline-info btn-sm">{{ enlace }}</a>
+                  </li>
+                  {% endfor %}
+              </ul>
+          </div>
       </div>
-      {% endif %}
+      {% endif %} 
+      {% endfor %}
 
-      <!-- TECHNOLOGIES -->
+
+      <!-- TECNOLOGIAS -->
       {% if 'technologies' in data %}
       <div class="card riesgo-2">
         <div class="card-header">
           <h2 class="card-title">
             <img
-              src="https://shorturl.at/ECRB5"
+              src="https://shorturl.at/RFAFV"
               alt="Tecnologías"
               class="categoria-icon"
             />
             Tecnologías
           </h2>
-          <span class="valor-indicador valor-2" title="Riesgo Medio">2</span>
+          <button class="valor-indicador valor-2" title="Riesgo Medio" onclick="scrollToRatingScale()">2</button>
         </div>
         <div class="card-body">
           {% if 'error' in data['technologies'] %}
           <p class="text-danger">{{ data['technologies']['error'] }}</p>
           {% else %}
-          <!-- <p>
-            <strong>URL analizada:</strong> {{ data['technologies']['request']
-            }}
-          </p>
-          <p>
-            <strong>Última verificación:</strong> {{
-            data['technologies']['last_checked'] }}
-          </p> -->
+          
 
           <div class="list-group">
             {% for result in data['technologies']['results'] %}
@@ -250,7 +161,100 @@
         </div>
       </div>
       {% endif %}
+    
+
+      <!-- SUBDOMINIOS -->
+      {% if 'subdomains' in data %}
+      <div class="card riesgo-1">
+        <div class="card-header">
+          <h2 class="card-title">
+
+            <img
+              src="https://shorturl.at/kWgCW"
+              alt="Subdominios"
+              class="categoria-icon"
+            />
+            Subdominios
+          </h2>
+          <button class="valor-indicador valor-1" title="Riesgo Bajo" onclick="scrollToRatingScale()">1</button>
+        </div>
+        <div class="card-body">
+          
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Subdominio</th>
+                <th>IP</th>
+                <th>Cloudflare</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sub in data['subdomains']['subdomains'] %}
+              <tr>
+                <td>{{ sub['subdomain'] }}</td>
+                <td>{{ sub['ip'] }}</td>
+                <td>{% if sub['cloudflare'] %}Sí{% else %}No{% endif %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+
+
+      <!-- MOBILE APPS -->
+      {% if 'mobile_apps' in data %}
+      <div class="card riesgo-0">
+        <div class="card-header">
+          <h2 class="card-title">
+            <img
+              src="https://shorturl.at/6GuGn"
+              alt="Aplicaciones Móviles"
+              class="categoria-icon"
+            />
+            Aplicaciones Móviles
+          </h2>
+          <!-- CAMBIOS -->
+           <!-- CAMBIOS -->
+          <button class="valor-indicador valor-0" title="Riesgo Despreciable" onclick="scrollToRatingScale()"
+            >0</button
+          >
+        </div>
+        <div class="card-body">
+          <div class="row">
+            {% for app in data['mobile_apps'] %}
+            <div class="col-md-3 mb-3">
+              <div class="card h-100">
+                <img
+                  src="{{ app.image }}"
+                  class="card-img-top"
+                  alt="{{ app.name }} logo"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{ app.name }}</h5>
+                  <p class="card-text">
+                    {% if app.store == 'App Store' %} Versión: {{ app.version
+                    }}<br />
+                    Bundle ID: {{ app.bundle_id }} {% else %} App ID: {{
+                    app.app_id }} {% endif %}
+                  </p>
+                  <a
+                    href="{{ app.url }}"
+                    target="_blank"
+                    class="btn btn-outline-secondary btn-sm"
+                    >Ver en {{ app.store }}</a
+                  >
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
+      
 
      <!-- Escala de valoración al final -->
      <div class="rating-scale">
@@ -320,11 +324,5 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
-    <!-- Bootstrap JS y dependencias -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
+<script src="{{ url_for('static', filename='js/srscript.js') }}"></script>
 </html>
