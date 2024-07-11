@@ -137,8 +137,10 @@ def search_results():
         
     if checks['technologies']:
         data['technologies'] = search_technologies(domain)
+        
 
     return render_template('search_results.html', data=data)
     
+
 if __name__ == '__main__':
     app.run(debug=True)
